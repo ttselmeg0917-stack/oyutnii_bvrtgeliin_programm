@@ -305,15 +305,35 @@ function courseRow(c) {
     </button>`;
 }
 
+let searchText = "";
+
 function renderCourseList() {
   if (state.loading) {
     $("courseCount").textContent = "";
     $("courseList").innerHTML = `<p class="empty">Ачаалж байна...</p>`;
     return;
   }
-  $("courseCount").textContent = hasProfile() ? `${COURSES.length} хичээл` : "";
-  $("courseList").innerHTML = COURSES.map(courseRow).join("");
+
+  // COURSES → filter() → тохирох хичээлүүд
+  const q = searchText.trim().toLowerCase();
+  const list = COURSES.filter((c) =>
+    !q || [c.name, c.code, c.teacher, c.teacherCode].some((v) => v.toLowerCase().includes(q))
+  );
+
+  $("courseCount").textContent = hasProfile()
+    ? (q ? `${list.length} хичээл олдлоо` : `${COURSES.length} хичээл`)
+    : "";
+
+  $("courseList").innerHTML = list.length
+    ? list.map(courseRow).join("")
+    : `<p class="empty">"${esc(searchText)}" гэсэн хичээл олдсонгүй. Өөр үгээр хайж үзнэ үү.</p>`;
 }
+
+
+$("searchInput").addEventListener("input", (e) => {
+  searchText = e.target.value;
+  renderCourseList();
+});
 
 
 function openDetails(code) {

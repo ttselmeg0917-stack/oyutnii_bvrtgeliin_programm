@@ -241,7 +241,33 @@
     .my-item__open .my-item__name,
     .my-item__open .my-item__meta { display: block; }
     .my-item__open:hover .my-item__name { color: var(--sky); }
-
+       
+    .search {
+      position: relative;
+      display: block;
+      margin-bottom: 16px;
+    }
+    .search__icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .search input {
+      width: 100%;
+      font: inherit;
+      font-size: 1rem;
+      padding: 13px 14px 13px 44px;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      color: var(--ink);
+    }
+    .search input:focus {
+      outline: none;
+      border-color: var(--sky);
+      box-shadow: 0 0 0 3px rgba(47, 111, 209, 0.18);
+    }
     @media (max-width: 640px) {
       .profile-form .field-row { grid-template-columns: 1fr; gap: 0; }
       .course-row { flex-direction: column; align-items: flex-start; }
@@ -331,6 +357,10 @@
         <div id="courseArea" hidden>
           <div class="sem-tabs" role="tablist" aria-label="Улирал">
           </div>
+           <label class="search" for="searchInput">
+            <span class="search__icon" aria-hidden="true"></span>
+            <input type="search" id="searchInput" placeholder="Хичээлийн нэр, код эсвэл багшаар хайх..." autocomplete="off" />
+          </label>
           <div id="courseList" class="course-list"></div>
         </div>
       </section>
