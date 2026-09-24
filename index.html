@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Нэвтрэх — Course Registration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+   
+    .login {
+      grid-template-columns: 1fr;
+    }
+    .login__panel {
+      min-height: 100vh;
+      align-items: center;
+      padding-top: 40px;
+    }
+  </style>
+</head>
+<body class="login-page">
+
+  <main class="login">
+    <section class="login__panel">
+      <form id="loginForm" class="login-form" novalidate>
+        <h2 class="login-form__title">Нэвтрэх</h2>
+        <p class="login-form__hint">Сургуулийн email, нууц үгээ оруулна уу.</p>
+
+        <div id="formMessage" class="form-message" role="alert" hidden></div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="se24d001@student.edu.mn"
+            autocomplete="email"
+            required
+          />
+          <p class="field__error" id="emailError"></p>
+        </div>
+
+        <div class="field">
+          <label for="password">Нууц үг</label>
+          <div class="password-wrap">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required
+            />
+            <button type="button" id="togglePassword" class="password-toggle" aria-label="Нууц үг харуулах">
+              Харах
+            </button>
+          </div>
+          <p class="field__error" id="passwordError"></p>
+        </div>
+
+        <button type="submit" id="loginBtn" class="btn-primary">
+          <span class="btn-primary__text">Нэвтрэх</span>
+          <span class="spinner" aria-hidden="true"></span>
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

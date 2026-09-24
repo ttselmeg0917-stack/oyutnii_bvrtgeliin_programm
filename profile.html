@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Миний мэдээлэл — Course Registration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+   
+    .profile-card.profile-card--wide {
+      max-width: none;
+      margin-bottom: 28px;
+    }
+    .profile-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .profile-head h1 { margin-bottom: 0; }
+
+    .btn-edit {
+      font: inherit;
+      font-weight: 600;
+      color: var(--sky);
+      background: #eef3fc;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+    .btn-edit:hover { background: #dfe9fa; }
+
+    .profile-list--grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      column-gap: 24px;
+    }
+    .profile-list--grid div { grid-template-columns: 90px 1fr; }
+
+    .profile-form .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .form-actions { display: flex; gap: 10px; margin-top: 6px; }
+    .form-actions button,
+    .detail-actions button {
+      font: inherit;
+      font-weight: 600;
+      padding: 11px 18px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+    .btn-blue { background: var(--sky); color: var(--white); border: none; }
+    .btn-blue:hover:not(:disabled) { background: var(--sky-dark); }
+    .btn-blue:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-plain { background: var(--white); color: var(--ink); border: 1.5px solid var(--line); }
+    .btn-red { background: var(--error); color: var(--white); border: none; }
+    .profile-note { color: var(--muted); font-size: 0.88rem; margin-bottom: 16px; }
+
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .section-head h2 { font-size: 1.35rem; }
+
+    .locked {
+      background: var(--white);
+      border: 1.5px dashed var(--line);
+      border-radius: var(--radius-lg);
+      padding: 28px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .sem-tabs {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      background: #e9eef6;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .sem-tabs button {
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--muted);
+      background: transparent;
+      border: none;
+      border-radius: 7px;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+    .sem-tabs button.is-active {
+      color: var(--ink);
+      background: var(--white);
+      box-shadow: 0 1px 2px rgba(22, 33, 58, 0.12);
+    }
+
+    .sem-heading {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin: 18px 0 8px;
+    }
+    .sem-heading:first-child { margin-top: 0; }
+
+    .course-list { display: grid; gap: 8px; }
+
+    .course-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      font: inherit;
+      color: var(--ink);
+      background: var(--white);
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      padding: 13px 16px;
+      cursor: pointer;
+    }
+    .course-row:hover { border-color: var(--sky); }
+    .course-row:focus-visible { outline: 3px solid rgba(47, 111, 209, 0.35); outline-offset: 1px; }
+    .course-row.is-selected { border-color: var(--success); background: #f1faf5; }
+    .course-row__name { display: block; font-weight: 600; line-height: 1.3; }
+    .course-row__meta { display: block; color: var(--muted); font-size: 0.86rem; }
+    .course-row__side { flex-shrink: 0; text-align: right; }
+    .pill {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #eef3fc;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .pill--ok { background: #dff2e8; color: var(--success); }
+
+    .dialog.dialog--details { max-width: 480px; text-align: left; }
+    .detail-sem { color: var(--muted); font-size: 0.88rem; margin-bottom: 4px; }
+    .detail-title { font-size: 1.3rem; line-height: 1.25; margin-bottom: 14px; }
+    .detail-list div { grid-template-columns: 130px 1fr; padding: 9px 0; }
+    .sessions { list-style: none; }
+    .sessions li + li { margin-top: 4px; }
+    .detail-warn {
+      background: var(--error-bg);
+      color: var(--error);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 0.92rem;
+      margin-top: 14px;
+    }
+    .detail-actions { display: flex; gap: 10px; margin-top: 18px; }
+    .detail-actions button { flex: 1; }
+
+
+    .timetable-card {
+      background: var(--white);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      margin-top: 32px;
+    }
+    .timetable-card h2 { font-size: 1.35rem; }
+    .timetable-card > p { margin: 4px 0 16px; }
+    .timetable-wrap { overflow-x: auto; }
+    .timetable {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: separate;
+      border-spacing: 4px;
+      table-layout: fixed;
+    }
+    .timetable th {
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 6px;
+      text-align: center;
+    }
+    .timetable th.tt-time-head { width: 96px; }
+    .timetable td {
+      height: 70px;
+      background: #f5f7fb;
+      border-radius: 8px;
+      vertical-align: top;
+      padding: 0;
+    }
+    .timetable td.tt-time {
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-align: center;
+      vertical-align: middle;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.35;
+    }
+    .tt-chip {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 70px;
+      text-align: left;
+      font: inherit;
+      color: var(--ink);
+      border: none;
+      border-left: 4px solid;
+      border-radius: 8px;
+      padding: 7px 9px;
+      cursor: pointer;
+    }
+    .tt-chip:focus-visible { outline: 3px solid rgba(47, 111, 209, 0.35); }
+    .tt-chip__name { display: block; font-weight: 600; font-size: 0.85rem; line-height: 1.25; }
+    .tt-chip__meta { display: block; font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
+
+    .my-item__open {
+      flex: 1;
+      min-width: 0;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+    .my-item__open .my-item__name,
+    .my-item__open .my-item__meta { display: block; }
+    .my-item__open:hover .my-item__name { color: var(--sky); }
+
+    @media (max-width: 640px) {
+      .profile-form .field-row { grid-template-columns: 1fr; gap: 0; }
+      .course-row { flex-direction: column; align-items: flex-start; }
+      .course-row__side { text-align: left; }
+    }
+  </style>
+</head>
+<body class="app-page">
+
+  <header class="app-header">
+    <a href="courses.html" class="brand">
+      <span class="brand__mark"></span>
+      <span class="brand__name">Course Registration</span>
+    </a>
+    <nav class="app-nav">
+      <a href="courses.html">Хичээлүүд</a>
+      <a href="profile.html" class="is-active">Миний мэдээлэл</a>
+      <span class="app-nav__email" id="userEmail"></span>
+      <button type="button" id="logoutBtn" class="btn-logout"> Гарах</button>
+    </nav>
+  </header>
+
+  <main class="app-main">
+
+   
+    <section class="profile-card profile-card--wide">
+      <div class="profile-head">
+        <h1>Миний мэдээлэл</h1>
+        <button type="button" id="editBtn" class="btn-edit">Засах</button>
+      </div>
+
+      <dl class="profile-list profile-list--grid" id="profileView">
+        <div><dt>Нэр</dt><dd id="pName">—</dd></div>
+        <div><dt>Код</dt><dd id="pCode">—</dd></div>
+        <div><dt>Мэргэжил</dt><dd id="pMajor">—</dd></div>
+        <div><dt>Анги</dt><dd id="pClass">—</dd></div>
+        <div><dt>Email</dt><dd id="pEmail">—</dd></div>
+      </dl>
+
+            <form id="profileForm" class="profile-form" novalidate hidden>
+        <p class="profile-note">Мэдээллээ бөглөөд "Хадгалах" дарахад сонгох хичээлүүдийн жагсаалт гарч ирнэ.</p>
+        <div class="field-row">
+          <div class="field">
+            <label for="fFirstName">Нэр</label>
+            <input type="text" id="fFirstName" />
+            <p class="field__error" id="fFirstNameError"></p>
+          </div>
+          <div class="field">
+            <label for="fLastName">Овог</label>
+            <input type="text" id="fLastName" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="fCode">Оюутны код</label>
+          <input type="text" id="fCode" />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="fMajor">Мэргэжил</label>
+            <input type="text" id="fMajor" />
+          </div>
+          <div class="field">
+            <label for="fClass">Анги</label>
+            <input type="text" id="fClass" />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-blue">Хадгалах</button>
+          <button type="button" id="cancelBtn" class="btn-plain">Болих</button>
+        </div>
+      </form>
+    </section>
+
+  
+    <div class="app-layout">
+      <section id="coursesSection">
+        <div class="section-head">
+          <h2> Сонгох хичээлүүд</h2>
+          <p class="muted" id="courseCount"></p>
+        </div>
+
+        <div id="lockedNote" class="locked">
+           Эхлээд дээрх "Миний мэдээлэл" хэсгийг бөглөж хадгална уу.<br />
+          Дараа нь сонгох хичээлүүдийн жагсаалт энд гарч ирнэ.
+        </div>
+
+        <div id="courseArea" hidden>
+          <div class="sem-tabs" role="tablist" aria-label="Улирал">
+          </div>
+          <div id="courseList" class="course-list"></div>
+        </div>
+      </section>
+
+      <aside class="my-panel" aria-labelledby="myTitle">
+        <h2 id="myTitle"> Миний сонголт</h2>
+        <div class="credit-box">
+          <p class="credit-box__label">Нийт кредит</p>
+          <p class="credit-box__value" id="creditValue">0 / 25</p>
+          <div class="meter" id="creditMeter"><span></span></div>
+          <p class="credit-box__hint" id="creditHint"></p>
+        </div>
+        <ul id="myList" class="my-list"></ul>
+      </aside>
+    </div>
+
+
+    <section class="timetable-card" id="timetableSection">
+      <h2> Миний хичээлийн хуваарь</h2>
+      <p class="muted" id="timetableHint">Хичээл сонгоход энд хуваарь гарч ирнэ.</p>
+      <div class="timetable-wrap">
+        <table class="timetable" id="timetable"></table>
+      </div>
+    </section>
+  </main>
+
+
+  <dialog id="courseDialog" class="dialog dialog--details">
+    <div id="detailBody"></div>
+    <div class="detail-actions">
+      <button type="button" id="detailClose" class="btn-plain">Хаах</button>
+      <button type="button" id="detailAction" class="btn-blue">Сонгох</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>
