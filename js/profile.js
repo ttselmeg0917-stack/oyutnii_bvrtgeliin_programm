@@ -1,6 +1,5 @@
-
-
 const CREDIT_LIMIT = 25;  
+const CREDIT_PRICE = 200000;   // 1 кредит = 200,000₮
 const DAYS = ["Даваа", "Мягмар", "Лхагва", "Пүрэв", "Баасан"];
 
 const PERIODS = [
@@ -11,6 +10,7 @@ const PERIODS = [
   { start: "15:10", end: "16:40" },
 ];
 
+// Хуваарийн өнгө (хичээл бүрт өөр өнгө)
 const COLORS = [
   { bg: "#e3edfd", line: "#2f6fd1" },
   { bg: "#e3f4ea", line: "#1e8a5b" },
@@ -313,6 +313,7 @@ function renderCourseList() {
     return;
   }
 
+  // COURSES → filter() → тохирох хичээлүүд
   const q = searchText.trim().toLowerCase();
   const list = COURSES.filter((c) =>
     !q || [c.name, c.code, c.teacher, c.teacherCode].some((v) => v.toLowerCase().includes(q))
@@ -515,8 +516,25 @@ function renderTimetable() {
   $("timetable").innerHTML = head + `<tbody>${body}</tbody>`;
 }
 
+function formatMoney(amount) {
+  return String(amount).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "₮";
+}
+
+function renderPayment() {
+  const credits = totalCredits();
+  const total = credits * CREDIT_PRICE;
+
+  $("payCredits").textContent = `${credits} кр`;
+  $("payPrice").textContent = formatMoney(CREDIT_PRICE);
+  $("payTotal").textContent = formatMoney(total);
+  $("payHint").textContent = credits
+    ? `${credits} кредит × ${formatMoney(CREDIT_PRICE)} = ${formatMoney(total)}`
+    : "Хичээл сонгоход төлбөр энд автоматаар тооцоологдоно.";
+}
+
 function renderAll() {
   renderProfile();
+  renderPayment();
   renderCourseList();
   renderSelection();
   renderTimetable();

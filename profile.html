@@ -63,6 +63,33 @@
     .btn-red { background: var(--error); color: var(--white); border: none; }
     .profile-note { color: var(--muted); font-size: 0.88rem; margin-bottom: 16px; }
 
+    /* Төлбөрийн мэдээлэл */
+    .payment {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1.5px solid var(--line);
+    }
+    .payment h2 { font-size: 1.1rem; margin-bottom: 12px; }
+    .payment__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+    }
+    .payment__item {
+      background: #f5f7fb;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+    }
+    .payment__label { color: var(--muted); font-size: 0.88rem; }
+    .payment__value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .payment__item--total { background: #eef3fc; }
+    .payment__item--total .payment__value { color: var(--sky); font-size: 1.45rem; }
+    .payment__hint { color: var(--muted); font-size: 0.88rem; margin-top: 10px; }
+
 
     .section-head {
       display: flex;
@@ -339,6 +366,25 @@
           <button type="button" id="cancelBtn" class="btn-plain">Болих</button>
         </div>
       </form>
+
+      <div class="payment" id="paymentBox">
+        <h2>Төлбөрийн мэдээлэл</h2>
+        <div class="payment__grid">
+          <div class="payment__item">
+            <p class="payment__label">Сонгосон кредит</p>
+            <p class="payment__value" id="payCredits">0 кр</p>
+          </div>
+          <div class="payment__item">
+            <p class="payment__label">1 кредитийн үнэ</p>
+            <p class="payment__value" id="payPrice">200,000₮</p>
+          </div>
+          <div class="payment__item payment__item--total">
+            <p class="payment__label">Нийт төлөх төлбөр</p>
+            <p class="payment__value" id="payTotal">0₮</p>
+          </div>
+        </div>
+        <p class="payment__hint" id="payHint"></p>
+      </div>
     </section>
 
   
