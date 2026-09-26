@@ -82,7 +82,7 @@ function translateError(error) {
   const msg = (error.message || "").toLowerCase();
 
   if (msg.includes("invalid login credentials")) {
-    return "❌ Email эсвэл нууц үг буруу байна.";
+    return " Email эсвэл нууц үг буруу байна.";
   }
   if (msg.includes("email not confirmed")) {
     return "Email хаяг баталгаажаагүй байна. Email-ээ шалгана уу.";

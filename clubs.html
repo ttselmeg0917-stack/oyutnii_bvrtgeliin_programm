@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Клуб, дугуйлан — Course Registration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .page-head { margin-bottom: 22px; }
+    .page-head h1 { font-size: 1.6rem; }
+    .page-head p { margin-top: 4px; }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .section-head h2 { font-size: 1.35rem; }
+
+    .locked {
+      background: var(--white);
+      border: 1.5px dashed var(--line);
+      border-radius: var(--radius-lg);
+      padding: 28px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .locked a { color: var(--sky); font-weight: 600; }
+
+    /* Ангиллын шүүлтүүр */
+    .cat-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .cat-tabs button {
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: #e9eef6;
+      border: none;
+      border-radius: 999px;
+      padding: 7px 13px;
+      cursor: pointer;
+    }
+    .cat-tabs button:hover { color: var(--ink); }
+    .cat-tabs button.is-active { color: var(--white); background: var(--ink); }
+    .cat-tabs button:focus-visible { outline: 3px solid rgba(47, 111, 209, 0.35); }
+
+    /* Хайлт */
+    .search { display: block; margin-bottom: 16px; }
+    .search input {
+      width: 100%;
+      font: inherit;
+      font-size: 1rem;
+      padding: 13px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      color: var(--ink);
+    }
+    .search input:focus {
+      outline: none;
+      border-color: var(--sky);
+      box-shadow: 0 0 0 3px rgba(47, 111, 209, 0.18);
+    }
+
+    /* Клубын карт */
+    .club-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .club-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: var(--white);
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .club-card.is-joined { border-color: var(--success); background: #f1faf5; }
+    .club-card__top { display: flex; gap: 6px; flex-wrap: wrap; }
+    .club-card__name { font-size: 1.05rem; line-height: 1.3; }
+    .club-card__desc { color: var(--muted); font-size: 0.92rem; flex: 1; }
+    .club-card__time { font-size: 0.88rem; font-weight: 500; }
+    .club-card__actions { display: flex; gap: 8px; margin-top: 4px; }
+    .club-card__actions button { flex: 1; }
+
+    .pill {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #eef3fc;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .pill--ok { background: #dff2e8; color: var(--success); }
+
+    /* Товчнууд */
+    .btn-blue, .btn-plain, .btn-red {
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 9px 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+    .btn-blue { background: var(--sky); color: var(--white); border: none; }
+    .btn-blue:hover:not(:disabled) { background: var(--sky-dark); }
+    .btn-plain { background: var(--white); color: var(--ink); border: 1.5px solid var(--line); }
+    .btn-plain:hover { border-color: var(--sky); }
+    .btn-red { background: var(--white); color: var(--error); border: 1.5px solid #f0c5c1; }
+    .btn-red:hover:not(:disabled) { background: var(--error-bg); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    /* Миний клубууд самбар */
+    .count-box {
+      padding-bottom: 14px;
+      margin-bottom: 6px;
+      border-bottom: 1.5px solid var(--line);
+    }
+    .my-item__open {
+      flex: 1;
+      min-width: 0;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+    .my-item__open .my-item__name,
+    .my-item__open .my-item__meta { display: block; }
+    .my-item__open:hover .my-item__name { color: var(--sky); }
+
+    /* Дэлгэрэнгүй цонх */
+    .dialog.dialog--details { max-width: 500px; text-align: left; }
+    .detail-cat { margin-bottom: 8px; }
+    .detail-title { font-size: 1.3rem; line-height: 1.25; margin-bottom: 8px; }
+    .detail-desc { color: var(--muted); margin-bottom: 12px; }
+    .detail-list div { grid-template-columns: 140px 1fr; padding: 9px 0; }
+    .detail-actions { display: flex; gap: 10px; margin-top: 18px; }
+    .detail-actions button { flex: 1; padding: 11px 18px; }
+
+    @media (max-width: 640px) {
+      .detail-list div { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="app-page">
+
+  <header class="app-header">
+    <a href="profile.html" class="brand">
+      <span class="brand__mark"></span>
+      <span class="brand__name">Course Registration</span>
+    </a>
+    <nav class="app-nav">
+      <a href="clubs.html" class="is-active">Клуб, дугуйлан</a>
+      <a href="profile.html">Миний мэдээлэл</a>
+      <span class="app-nav__email" id="userEmail"></span>
+      <button type="button" id="logoutBtn" class="btn-logout">Гарах</button>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <div class="page-head">
+      <h1>Клуб, дугуйлан</h1>
+      <p class="muted">Сонирхсон клубээ сонгоод "Элсэх" дарна уу. Хэдэн ч клубт элсэж болно.</p>
+    </div>
+
+    <div class="app-layout">
+      <section>
+        <div class="section-head">
+          <h2>Бүх клубууд</h2>
+          <p class="muted" id="clubCount"></p>
+        </div>
+
+        <div id="lockedNote" class="locked" hidden>
+          Клубт элсэхийн өмнө <a href="profile.html">"Миний мэдээлэл"</a> хэсгээ бөглөж хадгална уу.
+        </div>
+
+        <div id="clubArea">
+          <div class="cat-tabs" id="catTabs" aria-label="Ангилал"></div>
+          <label class="search" for="searchInput">
+            <input type="search" id="searchInput" placeholder="Клубын нэр, ангилал эсвэл тайлбараар хайх..." autocomplete="off" />
+          </label>
+          <div id="clubList" class="club-grid"></div>
+        </div>
+      </section>
+
+      <aside class="my-panel" aria-labelledby="myTitle">
+        <h2 id="myTitle">Миний клубууд</h2>
+        <div class="count-box">
+          <p class="credit-box__label">Элссэн клуб</p>
+          <p class="credit-box__value" id="joinedCount">0</p>
+        </div>
+        <ul id="myList" class="my-list"></ul>
+      </aside>
+    </div>
+  </main>
+
+  <dialog id="clubDialog" class="dialog dialog--details">
+    <div id="detailBody"></div>
+    <div class="detail-actions">
+      <button type="button" id="detailClose" class="btn-plain">Хаах</button>
+      <button type="button" id="detailAction" class="btn-blue">Элсэх</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/clubs.js"></script>
+</body>
+</html>

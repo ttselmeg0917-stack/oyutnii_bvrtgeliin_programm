@@ -11,7 +11,6 @@ const PERIODS = [
   { start: "15:10", end: "16:40" },
 ];
 
-// Хуваарийн өнгө (хичээл бүрт өөр өнгө)
 const COLORS = [
   { bg: "#e3edfd", line: "#2f6fd1" },
   { bg: "#e3f4ea", line: "#1e8a5b" },
@@ -314,7 +313,6 @@ function renderCourseList() {
     return;
   }
 
-  // COURSES → filter() → тохирох хичээлүүд
   const q = searchText.trim().toLowerCase();
   const list = COURSES.filter((c) =>
     !q || [c.name, c.code, c.teacher, c.teacherCode].some((v) => v.toLowerCase().includes(q))
